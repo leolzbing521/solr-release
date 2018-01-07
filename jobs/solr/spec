@@ -4,3 +4,6 @@ name: solr
 packages:
 - solr
 
+templates:
+  ctl.erb: bin/ctl
+  pre-start.erb: bin/pre-start

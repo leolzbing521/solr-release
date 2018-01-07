@@ -1,1 +1,6 @@
+check process solr
+  with pidfile /var/vcap/store/solr/pid
+  start program "/var/vcap/jobs/solr/bin/ctl start"
+  stop program "/var/vcap/jobs/solr/bin/ctl stop"
+  group vcap
  

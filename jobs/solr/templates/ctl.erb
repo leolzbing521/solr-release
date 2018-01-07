@@ -1,0 +1,49 @@
+#!/bin/bash
+
+set -e
+
+export SOLRCFGDIR=/var/vcap/jobs/solr/config
+export SOLR_LOG_DIR=/var/vcap/sys/log/solr
+export RUN_DIR=/var/vcap/sys/run/solr/
+export PIDFILE=/var/vcap/sys/run/solr/pid
+export TMPDIR=/var/vcap/data/solr/tmp
+
+export JAVA_HOME=/var/vcap/packages/java/jdk
+export PATH=$JAVA_HOME/bin:$PATH
+
+export CLASSPATH=${CLASSPATH:=-''}
+for jar_dir in $(ls -d /var/vcap/packages/*/*/*.jar);do
+   export CLASSPATH=${jar_dir}:$CLASSPATH
+done
+case $1 in
+  
+   start)
+      mkdir -p $SOLR_LOG_DIR $RUN_DIR
+      chown -R vcap:vcap $SOLR_LOG_DIR $RUN_DIR
+      echo $$ >$PIDFILE
+      
+       #exec chpst -u vcap:vcap \
+       exec chpst \
+            /var/vcap/packages/solr/bin/solr start -force \
+            >> $SOLR_LOG_DIR/solr_stdout.log \
+            2>> $SOLR_LOG_DIR/solr_stderr.log
+      ;;
+    stop)
+       if [ -f $PIDFILE ]; then
+          kill -9 `cat $PIDFILE` ||true
+          rm -f $PIDFILE
+       fi
+      ;;
+    status)
+       exec  /var/vcap/packages/solr/bin/solr status
+       ;;
+    help)
+     shift
+       exec /var/vcap/packages/solr/bin/solr --help
+     ;;
+      *)
+      echo "Usage: $0 {start|stop|status|help|}"
+      exit 1
+      ;;
+esac
+exit 0
