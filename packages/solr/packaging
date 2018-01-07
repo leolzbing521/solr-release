@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e  -u
+tar xzvf ${BOSH_COMPILE_TARGET}/solr/solr-6.6.2.tgz 
+cp -a ${BOSH_COMPILE_TARGET}/solr-6.6.2/* ${BOSH_INSTALL_TARGET}/
+
+exit 0

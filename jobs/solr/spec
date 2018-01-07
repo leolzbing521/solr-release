@@ -1,0 +1,6 @@
+---
+name: solr
+
+packages:
+- solr
+

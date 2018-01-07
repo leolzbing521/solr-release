@@ -1,0 +1,4 @@
+---
+name: solr
+files:
+- solr/solr-6.6.2.tgz
